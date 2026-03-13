@@ -1,22 +1,25 @@
 import joblib
-import os
 
-MODEL_DIR = "."
+# load heart model
+model = joblib.load("heart_model.pkl")
+scaler = joblib.load("heart_scaler.pkl")
 
-print("Current folder:", os.getcwd())
+print("Heart Model Type:", type(model))
+print()
 
-# load encoders
-drug_encoder = joblib.load(os.path.join(MODEL_DIR, "drug_encoder.pkl"))
-condition_encoder = joblib.load(os.path.join(MODEL_DIR, "condition_encoder.pkl"))
+# number of features
+if hasattr(model, "n_features_in_"):
+    print("Heart model expects features:", model.n_features_in_)
 
-print("\nTotal Supported Drugs:", len(drug_encoder.classes_))
-print("=================================")
+if hasattr(scaler, "n_features_in_"):
+    print("Heart scaler expects features:", scaler.n_features_in_)
 
-for drug in drug_encoder.classes_:
-    print(drug)
+print()
 
-print("\n\nTotal Supported Conditions:", len(condition_encoder.classes_))
-print("=================================")
-
-for condition in condition_encoder.classes_:
-    print(condition)
+# feature names if stored
+if hasattr(scaler, "feature_names_in_"):
+    print("Heart model features:")
+    for f in scaler.feature_names_in_:
+        print("-", f)
+else:
+    print("Feature names not stored in scaler.")

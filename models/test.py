@@ -1,16 +1,25 @@
 import joblib
-import os
 
-# path to models folder
-MODEL_DIR = r"R:\personalized_medicine_backend\models"
+# load model and scaler
+model = joblib.load("health_model.pkl")
+scaler = joblib.load("health_scaler.pkl")
 
-# load feature list
-health_features = joblib.load(os.path.join(MODEL_DIR, "health_features.pkl"))
+print("Model type:", type(model))
+print()
 
-print("\nHealth Model Features Used:")
-print("================================")
+# how many features model expects
+if hasattr(model, "n_features_in_"):
+    print("Model expects features:", model.n_features_in_)
 
-for i, feature in enumerate(health_features, 1):
-    print(f"{i}. {feature}")
+if hasattr(scaler, "n_features_in_"):
+    print("Scaler expects features:", scaler.n_features_in_)
 
-print("\nTotal Features:", len(health_features))
+print()
+
+# feature names if stored
+if hasattr(scaler, "feature_names_in_"):
+    print("Features used during training:")
+    for f in scaler.feature_names_in_:
+        print("-", f)
+else:
+    print("Feature names not stored in scaler.")
